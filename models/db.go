@@ -34,8 +34,10 @@ func Init() {
 		log.Fatal(err)
 	}
 
-	db.AutoMigrate(&User{})
+	db.DropTable(&User{})
+	db.DropTable(&Todo{})
 
+	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Todo{})
 	for index := range todo {
 		db.Create(&todo[index])

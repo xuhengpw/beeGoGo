@@ -1,10 +1,8 @@
 // Contains
 package models
 
-import "github.com/jinzhu/gorm"
-
 type Todo struct {
-	ID int
-	gorm.Model
+	// gorm.Model
+	ID       uint   `gorm:"primaryKey" json:"id"`
 	Activity string `json:"activity"`
 }
