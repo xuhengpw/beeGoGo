@@ -39,10 +39,16 @@ func Init() {
 
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Todo{})
+
+	// go func() {
 	for index := range todo {
 		db.Create(&todo[index])
 	}
+	// }()
+
+	// go func() {
 	for index := range users {
 		db.Create(&users[index])
 	}
+	// }()
 }
