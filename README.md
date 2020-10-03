@@ -48,6 +48,15 @@ Creates a user in the db with the coressponding **name**, **username**, **passwo
 
 Retrieve a user and its corresponding token from the service using the coresponding **username**, **password**
 
+## Request
+```
+{
+	"username": "jaadriano"
+	"password": "123456789"
+}	
+```
+
+
 ## Response
 ```
 {
