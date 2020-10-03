@@ -34,6 +34,8 @@ func Init() {
 		log.Fatal(err)
 	}
 
+	defer db.Close()
+
 	wait := make(chan string)
 
 	// func() {
@@ -59,4 +61,5 @@ func Init() {
 		<-wait
 	}
 	fmt.Println("Hellohere")
+
 }

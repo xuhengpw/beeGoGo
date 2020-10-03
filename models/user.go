@@ -32,6 +32,8 @@ func (h User) GetByID(id int) (User, error) {
 		log.Fatal(err)
 	}
 
+	defer db.Close()
+
 	user := &User{}
 	db.First(&user, id)
 
@@ -52,6 +54,8 @@ func (h User) PostUser(user User) (User, error) {
 		log.Fatal(err)
 	}
 
+	defer db.Close()
+
 	// generate jwt token
 	db.Create(&user)
 
@@ -71,6 +75,8 @@ func (h User) GetByCredentials(user User) (User, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer db.Close()
 
 	user2 := &User{}
 	db.First(&user2, user.Username, user.Password)
