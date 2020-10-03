@@ -3,7 +3,6 @@ package controllers
 import (
 	"beeGo/models"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"strconv"
 
@@ -90,9 +89,9 @@ func (c *UserController) Login() {
 
 // @Param   id    path    int     true  "id"
 func (c *UserController) Update() {
-	fmt.Println("helloworld")
+
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
-	fmt.Println(idParam)
+
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
