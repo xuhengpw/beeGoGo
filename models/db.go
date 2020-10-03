@@ -36,6 +36,7 @@ func Init() {
 
 	wait := make(chan string)
 
+	// func() {
 	go func() {
 		db.DropTable(&User{})
 		db.AutoMigrate(&User{})
@@ -45,6 +46,7 @@ func Init() {
 		wait <- "wait"
 	}()
 
+	// func() {
 	go func() {
 		db.DropTable(&Todo{})
 		db.AutoMigrate(&Todo{})
@@ -53,6 +55,8 @@ func Init() {
 		}
 		wait <- "wait"
 	}()
-	<-wait
-	<-wait
+	for {
+		<-wait
+	}
+	fmt.Println("Hellohere")
 }
