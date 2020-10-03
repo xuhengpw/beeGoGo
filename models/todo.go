@@ -14,7 +14,6 @@ import (
 )
 
 type Todo struct {
-	// gorm.Model
 	ID       uuid.UUID `json:"id,omitempty"`
 	Activity string    `json:"activity,omitempty"`
 }
@@ -83,21 +82,11 @@ func (h Todo) PostTodo(todo Todo) (Todo, error) {
 
 func (h Todo) UpdateActivity(todo Todo) (Todo, error) {
 
-	port, parseErr := beego.AppConfig.Int("port")
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
-
-	if parseErr != nil {
-		log.Fatal(parseErr)
-	}
-
-	db, err := gorm.Open("postgres", psqlconn)
-	if err != nil {
-		return todo, errors.New("Invalid Request")
-	}
-
+	db := ConnectDB()
 	defer db.Close()
+
 	prevTodo := todo
-	err = db.Where(map[string]interface{}{"id": todo.ID}).First(&todo).Error
+	err := db.Where(map[string]interface{}{"id": todo.ID}).First(&todo).Error
 
 	if err != nil {
 		return todo, errors.New("Invalid Request")
@@ -113,22 +102,13 @@ func (h Todo) UpdateActivity(todo Todo) (Todo, error) {
 }
 
 func (h Todo) DeleteActivity(id uuid.UUID) (Todo, error) {
-	todo := Todo{}
-	port, parseErr := beego.AppConfig.Int("port")
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
 
-	if parseErr != nil {
-		log.Fatal(parseErr)
-	}
-
-	db, err := gorm.Open("postgres", psqlconn)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	db := ConnectDB()
 	defer db.Close()
 
-	err = db.Where(map[string]interface{}{"id": id}).Find(&todo).Error
+	todo := Todo{}
+
+	err := db.Where(map[string]interface{}{"id": id}).Find(&todo).Error
 	if err != nil {
 		return todo, errors.New("Invalid Request")
 	}

@@ -13,6 +13,7 @@ func init() {
 	user := &controllers.UserController{}
 	todo := &controllers.TodoController{}
 
+	beego.Router("/user/:id", user, "get:Get")
 	beego.Router("/user/signup", user, "post:Signup")
 	beego.Router("/user/login", user, "post:Login")
 	beego.Router("/user/update/:id", user, "put:Update")

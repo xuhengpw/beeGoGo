@@ -4,7 +4,6 @@ import (
 	"beeGo/models"
 	"encoding/json"
 	"io/ioutil"
-	"strconv"
 
 	"github.com/astaxie/beego"
 	uuid "github.com/satori/go.uuid"
@@ -16,16 +15,28 @@ type UserController struct {
 
 // // @Param   id    path    int     true  "id"
 func (c *UserController) Get() {
-	idParam, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
 
 	user := models.User{}
-	newRetrievedUser, err := models.User.GetByID(user, idParam)
+	result, err := models.User.GetByID(user, idParam)
 
 	if err != nil {
-		return
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "request not found",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
 	}
 
-	c.Data["json"] = newRetrievedUser
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result":  result,
+			"token":   "test",
+			"success": true,
+		},
+	}
 	c.ServeJSON()
 }
 
