@@ -34,21 +34,25 @@ func Init() {
 		log.Fatal(err)
 	}
 
-	db.DropTable(&User{})
-	db.DropTable(&Todo{})
+	wait := make(chan string)
 
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&Todo{})
+	go func() {
+		db.DropTable(&User{})
+		db.AutoMigrate(&User{})
+		for index := range users {
+			db.Create(&users[index])
+		}
+		wait <- "wait"
+	}()
 
-	// go func() {
-	for index := range todo {
-		db.Create(&todo[index])
-	}
-	// }()
-
-	// go func() {
-	for index := range users {
-		db.Create(&users[index])
-	}
-	// }()
+	go func() {
+		db.DropTable(&Todo{})
+		db.AutoMigrate(&Todo{})
+		for index := range todo {
+			db.Create(&todo[index])
+		}
+		wait <- "wait"
+	}()
+	<-wait
+	<-wait
 }

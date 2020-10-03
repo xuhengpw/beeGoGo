@@ -38,6 +38,26 @@ func (h User) GetByID(id int) (User, error) {
 	return *user, nil
 }
 
+func (h User) PostUser(user User) (User, error) {
+	// query from database
+	port, parseErr := beego.AppConfig.Int("port")
+
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
+	if parseErr != nil {
+		log.Fatal(parseErr)
+	}
+
+	db, err := gorm.Open("postgres", psqlconn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// generate jwt token
+	db.Create(&user)
+
+	return user, nil
+}
+
 func (h User) GetByCredentials(user User) (User, error) {
 	// query from database
 	port, parseErr := beego.AppConfig.Int("port")
@@ -53,7 +73,7 @@ func (h User) GetByCredentials(user User) (User, error) {
 	}
 
 	user2 := &User{}
-	db.First(&user2, user.ID, user.ID)
+	db.First(&user2, user.Username, user.Password)
 
 	return *user2, nil
 }
