@@ -16,6 +16,6 @@ func init() {
 	beego.Router("/user/signup", user, "post:Signup")
 	beego.Router("/user/login", user, "post:Login")
 	beego.Router("/user/update/:id", user, "put:Update")
-	// beego.Router("/user/logout/:_id", user.Logout)
+	beego.Router("/user/delete/:id", user, "delete:Delete")
 	// beego.Router("/user/update/:_id", user.Update)
 }

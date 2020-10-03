@@ -65,14 +65,14 @@ func (h User) PostUser(user User) (User, error) {
 	}
 
 	defer db.Close()
-	prevID := user.ID
+	// prevID := user.ID
 	// search for duplicate username
 	err = db.Where(User{Username: user.Username}).First(&user).Error
 
-	if !(uuid.Equal(prevID, user.ID)) {
-		return user, errors.New("Request Invalid")
+	if err == nil {
+		return user, errors.New("Invalid Request")
 	}
-
+	// !(uuid.Equal(prevID, user.ID))
 	user.ID = u1
 	// generate jwt token
 	db.Create(&user)
@@ -83,7 +83,6 @@ func (h User) PostUser(user User) (User, error) {
 func (h User) LoginCredentials(user User) (User, error) {
 	// query from database
 	port, parseErr := beego.AppConfig.Int("port")
-
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
 	if parseErr != nil {
 		log.Fatal(parseErr)
@@ -97,6 +96,15 @@ func (h User) LoginCredentials(user User) (User, error) {
 	defer db.Close()
 
 	err = db.Where(&User{Username: user.Username, Password: user.Password}).First(&user).Error
+
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	// if !("0001-01-01 00:00:00 +0000" == user.Deleted_at.String()) {
+	// 	fmt.Println("here")
+	// 	return user, errors.New("Request Invalid")
+	// }
 
 	return user, err
 }
@@ -112,7 +120,7 @@ func (h User) UpdateAccount(user User) (User, error) {
 
 	db, err := gorm.Open("postgres", psqlconn)
 	if err != nil {
-		log.Fatal(err)
+		return user, errors.New("Invalid Request")
 	}
 
 	defer db.Close()
@@ -120,12 +128,44 @@ func (h User) UpdateAccount(user User) (User, error) {
 	err = db.Where(map[string]interface{}{"id": user.ID}).First(&user).Error
 
 	if err != nil {
-		fmt.Println("does not exists")
+		return user, errors.New("Invalid Request")
+	}
+
+	err = db.Save(&prevUser).Error
+
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	return prevUser, err
+}
+
+func (h User) DeleteAccount(id uuid.UUID) (User, error) {
+	user := User{}
+	port, parseErr := beego.AppConfig.Int("port")
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
+
+	if parseErr != nil {
+		log.Fatal(parseErr)
+	}
+
+	db, err := gorm.Open("postgres", psqlconn)
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	//
-	err = db.Save(&prevUser).Error
+	defer db.Close()
 
-	return prevUser, err
+	err = db.Where(map[string]interface{}{"id": id}).Find(&user).Error
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	err = db.Where(map[string]interface{}{"id": id}).Delete(&user).Error
+
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	return user, nil
 }

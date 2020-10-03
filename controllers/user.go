@@ -119,3 +119,29 @@ func (c *UserController) Update() {
 	}
 	c.ServeJSON()
 }
+
+func (c *UserController) Delete() {
+
+	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
+	user := models.User{}
+	result, err := models.User.DeleteAccount(user, idParam)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "request not found",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result":  result,
+			"token":   "test",
+			"success": true,
+		},
+	}
+	c.ServeJSON()
+}
