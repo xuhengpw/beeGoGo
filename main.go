@@ -12,7 +12,6 @@ import (
 )
 
 func main() {
-	log.Println("Env $PORT :", os.Getenv("PORT"))
 	if os.Getenv("PORT") != "" {
 		port, err := strconv.Atoi(os.Getenv("PORT"))
 		if err != nil {
@@ -21,9 +20,7 @@ func main() {
 		}
 		log.Println("port : ", port)
 		beego.BConfig.Listen.HTTPPort = port
-		beego.BConfig.Listen.HTTPSPort = port
 	}
-
 	models.Init()
 	beego.Run()
 }

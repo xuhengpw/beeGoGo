@@ -10,18 +10,19 @@ import (
 )
 
 var todo = []Todo{
-	{Activity: "Finish Tasks"},
-	{Activity: "Learn something new"},
-	{Activity: "Solve issues"},
+	// {Activity: "Finish Tasks"},
+	// {Activity: "Learn something new"},
+	// {Activity: "Solve issues"},
 }
 
 var users = []User{
-	{Name: "Jimmy Fallon"},
-	{Name: "Conan O'brien"},
-	{Name: "Jay Leno"},
+	// {Name: "Jimmy Fallon"},
+	// {Name: "Conan O'brien"},
+	// {Name: "Jay Leno"},
 }
 
 func Init() {
+
 	port, parseErr := beego.AppConfig.Int("port")
 
 	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
@@ -38,7 +39,6 @@ func Init() {
 
 	wait := make(chan string)
 
-	// func() {
 	go func() {
 		db.DropTable(&User{})
 		db.AutoMigrate(&User{})
@@ -48,7 +48,6 @@ func Init() {
 		wait <- "wait"
 	}()
 
-	// func() {
 	go func() {
 		db.DropTable(&Todo{})
 		db.AutoMigrate(&Todo{})
@@ -57,10 +56,6 @@ func Init() {
 		}
 		wait <- "wait"
 	}()
-
 	<-wait
 	<-wait
-
-	fmt.Println("Hellohere")
-
 }
