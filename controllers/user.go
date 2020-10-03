@@ -3,7 +3,6 @@ package controllers
 import (
 	"beeGo/models"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"strconv"
 
@@ -53,12 +52,12 @@ func (c *UserController) Login() {
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
 
-	newRetrievedUser, err := models.User.GetByCredentials(user, user)
-	fmt.Println(newRetrievedUser)
+	loggedInUser, err := models.User.LoginCredentials(user, user)
+
 	if err != nil {
 		return
 	}
 
-	c.Data["json"] = user
+	c.Data["json"] = loggedInUser
 	c.ServeJSON()
 }

@@ -57,9 +57,10 @@ func Init() {
 		}
 		wait <- "wait"
 	}()
-	for {
-		<-wait
-	}
+
+	<-wait
+	<-wait
+
 	fmt.Println("Hellohere")
 
 }

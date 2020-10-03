@@ -62,7 +62,7 @@ func (h User) PostUser(user User) (User, error) {
 	return user, nil
 }
 
-func (h User) GetByCredentials(user User) (User, error) {
+func (h User) LoginCredentials(user User) (User, error) {
 	// query from database
 	port, parseErr := beego.AppConfig.Int("port")
 
@@ -78,8 +78,7 @@ func (h User) GetByCredentials(user User) (User, error) {
 
 	defer db.Close()
 
-	user2 := &User{}
-	db.First(&user2, user.Username, user.Password)
-
-	return *user2, nil
+	db.Where(map[string]interface{}{"username": user.Username, "password": user.Password}).First(&user)
+	// db.First(&user2, "username")
+	return user, nil
 }
