@@ -1,7 +1,7 @@
 module beeGo
 
 go 1.14
-// +heroku goVersion go1.11
+// +heroku goVersion go1.14
 require (
 	github.com/astaxie/beego v1.12.2
 	github.com/codenote-net/beego-sandbox v0.0.0-20190604140309-9d2a0ea4e40b
