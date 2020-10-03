@@ -72,3 +72,60 @@ Retrieve a user and its corresponding token from the service using the corespond
 }
 ```
 ---
+## `PUT /user/update/:id`
+
+Update a user in the db with the coressponding **id** The body can be modified **name**,**username**, **password**
+
+
+## Request
+```
+{
+	"name": "Kurt"
+	"username": "Kurtified"
+	"password": "123456789"
+
+}	
+```
+
+
+## Response
+```
+{
+    "data": {
+        "result": {
+            "id": "47793bfa-2402-4f9e-bca1-7c3364c5d4a0",
+            "name": "Kurt"
+	        "username": "Kurtified"
+        	"password": "123456789"
+        },
+        "success": true,
+        "token": "test"
+    }
+}
+```
+---
+## `DELETE /user/delete/:id`
+
+Delete a user based on the id variable
+
+## Request
+```
+{}	
+```
+
+## Response
+```
+{
+    "data": {
+        "result": {
+            "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
+            "name": "James Adriano1244",
+            "username": "jaadriano32",
+            "password": "12345678"
+        },
+        "success": true,
+        "token": "test"
+    }
+}
+```
+---
