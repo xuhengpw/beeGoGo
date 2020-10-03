@@ -56,7 +56,6 @@ Retrieve a user and its corresponding token from the service using the corespond
 }	
 ```
 
-
 ## Response
 ```
 {
