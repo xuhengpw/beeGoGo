@@ -129,3 +129,110 @@ Delete a user based on the id variable
 }
 ```
 ---
+# Todo Endpoints
+
+### Parameters
+**_id** is the unique ID of the user
+
+**activity** description of an activity (unique)
+
+## `POST /todo/create`
+
+Creates an activity in the db with the coressponding **activity**
+
+
+## Request
+```
+{
+	"activity": "rock"
+}	
+```
+
+
+## Response
+```
+{
+    "data": {
+        "result": {
+            "id": "8a6abf41-d970-400e-acb8-676bda93f6d8",
+            "activity": "study2"
+        },
+        "success": true,
+        "token": "test"
+    }
+}
+```
+---
+## `GET /todo/get`
+
+Retrieve a todo  **id**, **activity**
+
+## Request
+```
+{}	
+```
+
+## Response
+```
+{
+    "data": {
+        "result": {
+            "id": "8a6abf41-d970-400e-acb8-676bda93f6d8",
+            "activity": "study2"
+        },
+        "success": true,
+        "token": "test"
+    }
+}
+```
+---
+## `PUT /user/update/:id`
+
+Update a todo document with variable **id** The body can be modified **activity**
+
+
+## Request
+```
+{
+    "activity": "working"
+}	
+```
+
+## Response
+```
+{
+    "data": {
+        "result": {
+            "id": "47793bfa-2402-4f9e-bca1-7c3364c5d4a0",
+            "username": "zjaadrianzzzzo",
+            "password": "123456789510"
+        },
+        "success": true,
+        "token": "test"
+    }
+}
+```
+---
+## `DELETE /todo/delete/:id`
+
+Delete a todo object based on the id variable
+
+## Request
+```
+{}	
+```
+
+## Response
+```
+{
+    "data": {
+        "result": {
+            "id": "8a6abf41-d970-400e-acb8-676bda93f6d8",
+            "activity": "rock"
+        },
+        "success": true,
+        "token": "test"
+    }
+}
+```
+---
