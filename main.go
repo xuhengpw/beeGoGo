@@ -1,15 +1,14 @@
 package main
 
 import (
-	_ "net/http/pprof"
-	"runtime/pprof"
-
 	"beeGo/models"
 	_ "beeGo/routers"
 	"flag"
 	"log"
+	_ "net/http/pprof"
 	"os"
 	"runtime"
+	"runtime/pprof"
 
 	"strconv"
 

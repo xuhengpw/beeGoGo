@@ -8,7 +8,11 @@ import (
 
 func init() {
 	test := &controllers.MainController{}
+
 	beego.Router("/", test)
+
+	beego.Router(`/debug/pprof`, &controllers.ProfController{})
+	beego.Router(`/debug/pprof/:pp([\w]+)`, &controllers.ProfController{})
 
 	user := &controllers.UserController{}
 	todo := &controllers.TodoController{}

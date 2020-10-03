@@ -23,7 +23,7 @@ func (c *UserController) Get() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
 				"success": false,
 			},
 		}
