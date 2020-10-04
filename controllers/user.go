@@ -12,7 +12,6 @@ type UserController struct {
 	MainController
 }
 
-// // @Param   id    path    int     true  "id"
 func (c *UserController) Get() {
 
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
@@ -52,7 +51,6 @@ func (c *UserController) Get() {
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *UserController) Signup() {
 
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
@@ -71,7 +69,6 @@ func (c *UserController) Signup() {
 		c.ServeJSON()
 	}
 
-	// Generate token
 	token, err := c.GenerateToken(result)
 
 	if err != nil {
@@ -94,7 +91,6 @@ func (c *UserController) Signup() {
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *UserController) Login() {
 
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
@@ -135,7 +131,6 @@ func (c *UserController) Login() {
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *UserController) Update() {
 
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
@@ -158,10 +153,22 @@ func (c *UserController) Update() {
 		c.ServeJSON()
 	}
 
+	authentic := c.Authenticate(result)
+
+	if !authentic {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "Invalid Token",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   token,
 			"success": true,
 		},
 	}
@@ -184,10 +191,22 @@ func (c *UserController) Delete() {
 		c.ServeJSON()
 	}
 
+	authentic := c.Authenticate(result)
+
+	if !authentic {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "Invalid Token",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   "test",
 			"success": true,
 		},
 	}

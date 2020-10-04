@@ -23,12 +23,13 @@ func (h User) GetByID(id uuid.UUID) (User, error) {
 	user := User{}
 
 	var err error
-	err = db.Where("id = ?", id).First(&user).Error
+	err = db.Where("id = ?", id).Select("id", "name", "username").First(&user).Error
 
 	if err != nil {
 		return user, errors.New("Invalid Request")
 	}
 
+	user.Password = ""
 	return user, nil
 }
 
@@ -44,14 +45,14 @@ func (h User) PostUser(user User) (User, error) {
 	db := ConnectDB()
 	defer db.Close()
 
-	err := db.Where(User{Username: user.Username}).First(&user).Error
+	err := db.Where(User{Username: user.Username}).Select([]string{"name", "username"}).Find(&user).Error
 
 	if err == nil {
 		return user, errors.New("Duplicate User")
 	}
 
 	user.ID = u1
-	// generate jwt token
+	user.Password = ""
 	db.Create(&user)
 
 	return user, nil
@@ -68,6 +69,7 @@ func (h User) LoginCredentials(user User) (User, error) {
 		return user, errors.New("Invalid Request")
 	}
 
+	user.Password = ""
 	return user, err
 }
 
@@ -77,18 +79,19 @@ func (h User) UpdateAccount(user User) (User, error) {
 	defer db.Close()
 
 	prevUser := user
-	err := db.Where(map[string]interface{}{"id": user.ID}).First(&user).Error
+	err := db.Where(map[string]interface{}{"id": user.ID}).Find(&user).Error
+
+	if err != nil || user.Name == "" {
+		return user, errors.New("Invalid Request")
+	}
+
+	user = prevUser
+	err = db.Model(&user).Updates(User{Name: prevUser.Name}).Error
 
 	if err != nil {
 		return user, errors.New("Invalid Request")
 	}
-
-	err = db.Save(&prevUser).Error
-
-	if err != nil {
-		return user, errors.New("Invalid Request")
-	}
-
+	prevUser.Password = ""
 	return prevUser, err
 }
 
@@ -109,6 +112,6 @@ func (h User) DeleteAccount(id uuid.UUID) (User, error) {
 	if err != nil {
 		return user, errors.New("Invalid Request")
 	}
-
+	user.Password = ""
 	return user, nil
 }
