@@ -138,6 +138,7 @@ func (c *UserController) Login() {
 		c.ServeJSON()
 	}
 
+	result.Password = ""
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
 			"result":  result,
