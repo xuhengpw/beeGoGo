@@ -1,5 +1,8 @@
 # beeGoGo
-TODO List API for using GO Lang framework BeeGo
+USER/TODO List API using Golang framework BeeGo
+DB: postgresql (heroku addon)
+APP Link: https://shielded-lake-20925.herokuapp.com/v1/
+
 # User Endpoints
 
 ### Parameters
@@ -78,7 +81,7 @@ Retrieve a user **name**,**username**, **password**
 
 ## Request
 ```
-{}	
+No Body	
 ```
 ## Response
 ```
@@ -134,7 +137,7 @@ Delete a user based on the id variable
 
 ## Request
 ```
-{}	
+No Body	
 ```
 
 ## Response
@@ -193,7 +196,7 @@ Retrieve a todo  **id**, **activity**
 
 ## Request
 ```
-{}	
+No Body
 ```
 
 ## Response
@@ -243,7 +246,7 @@ Delete a todo object based on the id variable
 
 ## Request
 ```
-{}	
+No Body	
 ```
 
 ## Response

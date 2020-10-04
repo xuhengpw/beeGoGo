@@ -7,8 +7,6 @@ import (
 )
 
 func init() {
-	home := &controllers.MainController{}
-	beego.Router("/", home)
 
 	user := &controllers.UserController{}
 	todo := &controllers.TodoController{}
