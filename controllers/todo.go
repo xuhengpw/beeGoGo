@@ -31,8 +31,8 @@ func (c *TodoController) Get() {
 
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   "test",
 			"success": true,
 		},
 	}
@@ -60,8 +60,8 @@ func (c *TodoController) Create() {
 
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   "test",
 			"success": true,
 		},
 	}
@@ -93,8 +93,8 @@ func (c *TodoController) Update() {
 
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   "test",
 			"success": true,
 		},
 	}
@@ -119,8 +119,8 @@ func (c *TodoController) Delete() {
 
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   "test",
 			"success": true,
 		},
 	}

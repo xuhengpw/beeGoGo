@@ -28,9 +28,9 @@ Creates a user in the db with the coressponding **name**, **username**, **passwo
 ## Request
 ```
 {
-	"name": "Kurt"
-	"username": "Kurtified"
-	"password": "123456789"
+	"name": "Noctis Regal"
+	"username": "noctisLight"
+	"password": "lucygaladriel"
 }	
 ```
 
@@ -40,12 +40,12 @@ Creates a user in the db with the coressponding **name**, **username**, **passwo
 {
     "data": {
         "result": {
-            "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
-            "name": "James Adriano1244",
-            "username": "jaadriano32",
+            "id": "06d6db89-59b1-4a4b-9a91-9b4f363da4f8",
+            "name": "Noctis Regal",
+            "username": "noctisLight"
         },
         "success": true,
-        "token": "test"
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vY3Rpc0xpZ2h0IiwiaWQiOiIwNmQ2ZGI4OS01OWIxLTRhNGItOWE5MS05YjRmMzYzZGE0ZjgiLCJpc3MiOiJiZWVvR29nbyJ9.LhOFeHDSqLJYHxKnriA4GDCuD_JY_PUMJzsYCA3ysU0"
     }
 }
 ```
@@ -57,8 +57,8 @@ Retrieve a user and its corresponding token from the service using the corespond
 ## Request
 ```
 {
-	"username": "jaadriano"
-	"password": "123456789"
+	"username": "noctisLight"
+	"password": "lucygaladriel"
 }	
 ```
 
@@ -67,12 +67,12 @@ Retrieve a user and its corresponding token from the service using the corespond
 {
     "data": {
         "result": {
-            "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
-            "name": "James Adriano1244",
-            "username": "jaadriano32",
+            "id": "06d6db89-59b1-4a4b-9a91-9b4f363da4f8",
+            "name": "Noctis Regal",
+            "username": "noctisLight"
         },
         "success": true,
-        "token": "test"
+        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5vY3Rpc0xpZ2h0IiwiaWQiOiIwMDAwMDAwMC0wMDAwLTAwMDAtMDAwMC0wMDAwMDAwMDAwMDAiLCJpc3MiOiJiZWVvR29nbyJ9.TsYMNLFUn6eUZIORwjvR5ZoVrYuBunh8-A15qM0AjdU"
     }
 }
 ```
@@ -91,8 +91,8 @@ No Body
     "data": {
         "result": {
             "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
-            "name": "James Adriano1244",
-            "username": "jaadriano32",
+            "name": "Noctis Lucii",
+            "username": "chocobo15",
         },
         "success": true,
         "token": "test"
@@ -108,7 +108,7 @@ Update a user in the db with the coressponding **id** The body can be modified *
 ## Request
 ```
 {
-	"name": "Kurt"
+	"name": "Black Adam"
 }	
 ```
 
@@ -119,10 +119,9 @@ Update a user in the db with the coressponding **id** The body can be modified *
     "data": {
         "result": {
             "id": "47793bfa-2402-4f9e-bca1-7c3364c5d4a0",
-            "name": "Kurt"
+            "name": "Black Adam"
         },
         "success": true,
-        "token": "test"
     }
 }
 ```
@@ -142,11 +141,10 @@ No Body
     "data": {
         "result": {
             "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
-            "name": "James Adriano1244",
-            "username": "jaadriano32",
+            "name": "James Adriano",
+            "username": "noctisLight",
         },
         "success": true,
-        "token": "test"
     }
 }
 ```
@@ -166,7 +164,7 @@ Creates an activity in the db with the coressponding **activity**
 ## Request
 ```
 {
-	"activity": "rock"
+	"activity": "Travel to Japan"
 }	
 ```
 
@@ -177,10 +175,9 @@ Creates an activity in the db with the coressponding **activity**
     "data": {
         "result": {
             "id": "8a6abf41-d970-400e-acb8-676bda93f6d8",
-            "activity": "study2"
+            "activity": "Travel to Japan"
         },
         "success": true,
-        "token": "test"
     }
 }
 ```
@@ -200,10 +197,9 @@ No Body
     "data": {
         "result": {
             "id": "8a6abf41-d970-400e-acb8-676bda93f6d8",
-            "activity": "study2"
+            "activity": "Golang programming"
         },
-        "success": true,
-        "token": "test"
+        "success": true
     }
 }
 ```
@@ -216,7 +212,7 @@ Update a todo document with variable **id** The body can be modified **activity*
 ## Request
 ```
 {
-    "activity": "working"
+    "activity": "Music Lessons"
 }	
 ```
 
@@ -226,10 +222,9 @@ Update a todo document with variable **id** The body can be modified **activity*
     "data": {
         "result": {
             "id": "8a6abf41-d970-400e-acb8-676bda93f6d8",
-            "activity": "rock"
+            "activity": "Music Lessons"
         },
-        "success": true,
-        "token": "test"
+        "success": true
     }
 }
 ```
@@ -249,10 +244,9 @@ No Body
     "data": {
         "result": {
             "id": "8a6abf41-d970-400e-acb8-676bda93f6d8",
-            "activity": "rock"
+            "activity": "Nintendo Switch Gaming"
         },
         "success": true,
-        "token": "test"
     }
 }
 ```

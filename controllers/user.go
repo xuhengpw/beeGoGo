@@ -3,7 +3,6 @@ package controllers
 import (
 	"beeGo/models"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 
 	uuid "github.com/satori/go.uuid"
@@ -58,15 +57,15 @@ func (c *UserController) Signup() {
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
 
-	hash, _ := c.HashPassword(user.Password) // ignore error for the sake of simplicity
+	hash, _ := c.HashPassword(user.Password)
 	user.Password = hash
-	fmt.Println(user.Password)
+
 	result, err := models.User.PostUser(user, user)
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  err,
+				"result":  "Create User failed",
 				"success": false,
 			},
 		}
@@ -78,7 +77,7 @@ func (c *UserController) Signup() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  err,
+				"result":  "Token generation failed",
 				"success": false,
 			},
 		}
