@@ -90,12 +90,11 @@ No Body
 {
     "data": {
         "result": {
-            "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
-            "name": "Noctis Lucii",
-            "username": "chocobo15",
+            "id": "06d6db89-59b1-4a4b-9a91-9b4f363da4f8",
+            "name": "Noctis Regal",
+            "username": "noctisLight"
         },
-        "success": true,
-        "token": "test"
+        "success": true
     }
 }
 ```
@@ -140,8 +139,8 @@ No Body
 {
     "data": {
         "result": {
-            "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
-            "name": "James Adriano",
+            "id": "06d6db89-59b1-4a4b-9a91-9b4f363da4f8",
+            "name": "Noctis Regal",
             "username": "noctisLight",
         },
         "success": true,
