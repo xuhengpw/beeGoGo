@@ -38,7 +38,7 @@ func (h User) GetByID(id uuid.UUID) (User, error) {
 	user := User{}
 
 	var err error
-	err = db.Where("id = ?", id).Select("id", "name", "username").First(&user).Error
+	err = db.Where(map[string]interface{}{"id": id}).Find(&user).Error
 
 	if err != nil {
 		return user, errors.New("Invalid Request")
