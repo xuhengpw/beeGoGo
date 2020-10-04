@@ -1,8 +1,13 @@
 # beeGoGo
-USER/TODO List API using Golang framework BeeGo
-DB: postgresql (heroku addon)
-APP Link: https://shielded-lake-20925.herokuapp.com/v1/
-
+USER/TODO List API using Golang framework BeeGo<br /> 
+**DB**: postgresql (elephantsql)<br /> 
+Note: Public DB used<br /> 
+host     = "lallah.db.elephantsql.com" <br /> 
+port     = 5432 <br /> 
+user     = "hmjifcgn" <br /> 
+password = "G2wwl4PWrXJIUg3okpNild074BWUuYG5" <br /> 
+dbname   = "hmjifcgn" <br /> 
+**APP**: https://shielded-lake-20925.herokuapp.com/v1/ (Uses heroku db)
 # User Endpoints
 
 ### Parameters

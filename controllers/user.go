@@ -3,6 +3,7 @@ package controllers
 import (
 	"beeGo/models"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 
 	uuid "github.com/satori/go.uuid"
@@ -57,6 +58,9 @@ func (c *UserController) Signup() {
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
 
+	hash, _ := c.HashPassword(user.Password) // ignore error for the sake of simplicity
+	user.Password = hash
+	fmt.Println(user.Password)
 	result, err := models.User.PostUser(user, user)
 
 	if err != nil {
@@ -96,13 +100,26 @@ func (c *UserController) Login() {
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
+	unhashed := user.Password
 
-	result, err := models.User.LoginCredentials(user, user)
+	result, err := models.User.GetHashPassword(user, user)
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  err,
+				"result":  "Invalid Request",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	match := c.CheckPasswordHash(unhashed, result.Password)
+
+	if !(match) {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "Invalid Request",
 				"success": false,
 			},
 		}

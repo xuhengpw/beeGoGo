@@ -15,6 +15,21 @@ type User struct {
 	Password string    `json:"password,omitempty"`
 }
 
+func (h User) GetHashPassword(user User) (User, error) {
+
+	db := ConnectDB()
+	defer db.Close()
+
+	var err error
+	err = db.Where("username = ?", user.Username).Find(&user).Error
+
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	return user, nil
+}
+
 func (h User) GetByID(id uuid.UUID) (User, error) {
 
 	db := ConnectDB()
@@ -52,8 +67,10 @@ func (h User) PostUser(user User) (User, error) {
 	}
 
 	user.ID = u1
-	user.Password = ""
+
 	db.Create(&user)
+
+	user.Password = ""
 
 	return user, nil
 }
@@ -62,6 +79,8 @@ func (h User) LoginCredentials(user User) (User, error) {
 
 	db := ConnectDB()
 	defer db.Close()
+	//
+	// err := db.Where(&User{Username: user.Username}).First(&user).Error
 
 	err := db.Where(&User{Username: user.Username, Password: user.Password}).First(&user).Error
 
