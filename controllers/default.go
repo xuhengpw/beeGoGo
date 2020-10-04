@@ -4,6 +4,8 @@ import (
 	"beeGo/models"
 	"errors"
 
+	"golang.org/x/crypto/bcrypt"
+
 	"github.com/astaxie/beego"
 	"github.com/dgrijalva/jwt-go"
 	uuid "github.com/satori/go.uuid"
@@ -20,6 +22,16 @@ type MainController struct {
 }
 
 var secretkey = beego.AppConfig.String("secretkey")
+
+func (a *MainController) HashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func (a *MainController) CheckPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
 
 func (a *MainController) GenerateToken(user models.User) (string, error) {
 
