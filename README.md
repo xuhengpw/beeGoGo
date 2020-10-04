@@ -1,5 +1,5 @@
 # beeGoGo
-USER/TODO List API using Golang framework BeeGo
+USER/TODO List API using Golang framework BeeGo<br /> 
 **DB**: postgresql (heroku addon)<br /> 
 Note: Public DB used<br /> 
 host     = "lallah.db.elephantsql.com" <br /> 
