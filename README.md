@@ -12,7 +12,7 @@ TODO List API for using GO Lang framework BeeGo
 **password** assigned password of the user (minimum of 8 characters)
 
 
-## `POST /user/signup`
+## `POST /v1/user/signup`
 
 Creates a user in the db with the coressponding **name**, **username**, **password**
 
@@ -44,7 +44,7 @@ Creates a user in the db with the coressponding **name**, **username**, **passwo
 }
 ```
 ---
-## `GET /user/login`
+## `GET /v1/user/login`
 
 Retrieve a user and its corresponding token from the service using the coresponding **username**, **password**
 
@@ -72,7 +72,7 @@ Retrieve a user and its corresponding token from the service using the corespond
 }
 ```
 ---
-## `PUT /user/update/:id`
+## `PUT /v1/user/:id`
 
 Update a user in the db with the coressponding **id** The body can be modified **name**,**username**, **password**
 
@@ -104,7 +104,7 @@ Update a user in the db with the coressponding **id** The body can be modified *
 }
 ```
 ---
-## `DELETE /user/delete/:id`
+## `DELETE /v1/user/:id`
 
 Delete a user based on the id variable
 
@@ -136,7 +136,7 @@ Delete a user based on the id variable
 
 **activity** description of an activity (unique)
 
-## `POST /todo/create`
+## `POST /v1/todo`
 
 Creates an activity in the db with the coressponding **activity**
 
@@ -163,7 +163,7 @@ Creates an activity in the db with the coressponding **activity**
 }
 ```
 ---
-## `GET /todo/get`
+## `GET /v1/todo/:id`
 
 Retrieve a todo  **id**, **activity**
 
@@ -186,7 +186,7 @@ Retrieve a todo  **id**, **activity**
 }
 ```
 ---
-## `PUT /user/update/:id`
+## `PUT /v1/user/:id`
 
 Update a todo document with variable **id** The body can be modified **activity**
 
@@ -213,7 +213,7 @@ Update a todo document with variable **id** The body can be modified **activity*
 }
 ```
 ---
-## `DELETE /todo/delete/:id`
+## `DELETE /v1/todo/:id`
 
 Delete a todo object based on the id variable
 
@@ -236,3 +236,6 @@ Delete a todo object based on the id variable
 }
 ```
 ---
+## `GET /v1/pprof`
+
+Shows profile descriptors for debugging purposes
