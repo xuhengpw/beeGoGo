@@ -5,12 +5,11 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/astaxie/beego"
 	uuid "github.com/satori/go.uuid"
 )
 
 type TodoController struct {
-	beego.Controller
+	MainController
 }
 
 // // @Param   id    path    int     true  "id"
@@ -23,7 +22,7 @@ func (c *TodoController) Get() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -52,7 +51,7 @@ func (c *TodoController) Create() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -85,7 +84,7 @@ func (c *TodoController) Update() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -111,7 +110,7 @@ func (c *TodoController) Delete() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
 				"success": false,
 			},
 		}

@@ -2,7 +2,6 @@ package models
 
 import (
 	"errors"
-	"fmt"
 	"log"
 
 	_ "github.com/lib/pq"
@@ -24,8 +23,8 @@ func (h User) GetByID(id uuid.UUID) (User, error) {
 	user := User{}
 
 	var err error
-	err = db.Where(User{ID: id}).First(&user).Error
-	fmt.Println(err)
+	err = db.Where("id = ?", id).First(&user).Error
+
 	if err != nil {
 		return user, errors.New("Invalid Request")
 	}
@@ -48,7 +47,7 @@ func (h User) PostUser(user User) (User, error) {
 	err := db.Where(User{Username: user.Username}).First(&user).Error
 
 	if err == nil {
-		return user, errors.New("Invalid Request")
+		return user, errors.New("Duplicate User")
 	}
 
 	user.ID = u1

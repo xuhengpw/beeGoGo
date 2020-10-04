@@ -5,16 +5,16 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"github.com/astaxie/beego"
 	uuid "github.com/satori/go.uuid"
 )
 
 type UserController struct {
-	beego.Controller
+	MainController
 }
 
 // // @Param   id    path    int     true  "id"
 func (c *UserController) Get() {
+
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
 
 	user := models.User{}
@@ -30,10 +30,22 @@ func (c *UserController) Get() {
 		c.ServeJSON()
 	}
 
+	authentic := c.Authenticate(result)
+
+	if !authentic {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "Invalid Token",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   "test",
 			"success": true,
 		},
 	}
@@ -52,7 +64,20 @@ func (c *UserController) Signup() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	// Generate token
+	token, err := c.GenerateToken(result)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -62,7 +87,7 @@ func (c *UserController) Signup() {
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
 			"result":  result,
-			"token":   "test",
+			"token":   token,
 			"success": true,
 		},
 	}
@@ -81,7 +106,19 @@ func (c *UserController) Login() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	token, err := c.GenerateToken(user)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -91,7 +128,7 @@ func (c *UserController) Login() {
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
 			"result":  result,
-			"token":   "test",
+			"token":   token,
 			"success": true,
 		},
 	}
@@ -114,7 +151,7 @@ func (c *UserController) Update() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -140,7 +177,7 @@ func (c *UserController) Delete() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
 				"success": false,
 			},
 		}

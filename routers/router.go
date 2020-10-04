@@ -7,11 +7,12 @@ import (
 )
 
 func init() {
-	test := &controllers.MainController{}
+	home := &controllers.MainController{}
+	beego.Router("/", home)
+
 	user := &controllers.UserController{}
 	todo := &controllers.TodoController{}
-
-	beego.Router("/", test)
+	profiler := &controllers.ProfController{}
 
 	ns := beego.NewNamespace("/v1",
 
@@ -25,8 +26,8 @@ func init() {
 			beego.NSRouter("/", todo, "post:Create"),
 		),
 		beego.NSNamespace("/pprof",
-			beego.NSRouter(`/:pp([\w]+)`, &controllers.ProfController{}),
-			beego.NSRouter(`/`, &controllers.ProfController{}),
+			beego.NSRouter(`/:pp([\w]+)`, profiler),
+			beego.NSRouter(`/`, profiler),
 		),
 	)
 

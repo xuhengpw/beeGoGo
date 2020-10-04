@@ -72,6 +72,30 @@ Retrieve a user and its corresponding token from the service using the corespond
 }
 ```
 ---
+## `GET /v1/user/:id`
+
+Retrieve a user **name**,**username**, **password**
+
+## Request
+```
+{}	
+```
+## Response
+```
+{
+    "data": {
+        "result": {
+            "id": "b136658a-1d3f-4cd8-94a0-5da565cac1d0",
+            "name": "James Adriano1244",
+            "username": "jaadriano32",
+            "password": "12345678"
+        },
+        "success": true,
+        "token": "test"
+    }
+}
+```
+---
 ## `PUT /v1/user/:id`
 
 Update a user in the db with the coressponding **id** The body can be modified **name**,**username**, **password**
