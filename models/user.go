@@ -1,124 +1,117 @@
 package models
 
 import (
-	"fmt"
+	"errors"
 	"log"
 
-	"github.com/jinzhu/gorm"
-
-	"github.com/astaxie/beego"
 	_ "github.com/lib/pq"
 	uuid "github.com/satori/go.uuid"
 )
 
 type User struct {
-	// gorm.Model
 	ID       uuid.UUID `json:"id,omitempty"`
-	Name     string    `json:"name"`
-	Username string    `json:"username"`
-	Password string    `json:"password"`
+	Name     string    `json:"name,omitempty"`
+	Username string    `json:"username,omitempty,unique"`
+	Password string    `json:"password,omitempty"`
 }
 
-func (h User) GetByID(id int) (User, error) {
+func (h User) GetByID(id uuid.UUID) (User, error) {
 
-	// query from database
-	port, parseErr := beego.AppConfig.Int("port")
-
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
-	if parseErr != nil {
-		log.Fatal(parseErr)
-	}
-
-	db, err := gorm.Open("postgres", psqlconn)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	db := ConnectDB()
 	defer db.Close()
 
-	user := &User{}
-	db.First(&user, id)
+	user := User{}
 
-	return *user, nil
+	var err error
+	err = db.Where("id = ?", id).Select("id", "name", "username").First(&user).Error
+
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	user.Password = ""
+	return user, nil
 }
 
 func (h User) PostUser(user User) (User, error) {
 
 	var uuidErr error
 	u1 := uuid.Must(uuid.NewV4(), uuidErr)
-	user.ID = u1
 
 	if uuidErr != nil {
 		log.Fatal(uuidErr)
 	}
 
-	// query from database
-	port, parseErr := beego.AppConfig.Int("port")
-
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
-	if parseErr != nil {
-		log.Fatal(parseErr)
-	}
-
-	db, err := gorm.Open("postgres", psqlconn)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	db := ConnectDB()
 	defer db.Close()
 
-	// generate jwt token
+	err := db.Where(User{Username: user.Username}).Select([]string{"name", "username"}).Find(&user).Error
+
+	if err == nil {
+		return user, errors.New("Duplicate User")
+	}
+
+	user.ID = u1
+	user.Password = ""
 	db.Create(&user)
 
 	return user, nil
 }
 
 func (h User) LoginCredentials(user User) (User, error) {
-	// query from database
-	port, parseErr := beego.AppConfig.Int("port")
 
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
-	if parseErr != nil {
-		log.Fatal(parseErr)
-	}
-
-	db, err := gorm.Open("postgres", psqlconn)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	db := ConnectDB()
 	defer db.Close()
 
-	err = db.Where(map[string]interface{}{"username": user.Username, "password": user.Password}).First(&user).Error
-	// db.First(&user2, "username")
+	err := db.Where(&User{Username: user.Username, Password: user.Password}).First(&user).Error
 
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	user.Password = ""
 	return user, err
 }
 
 func (h User) UpdateAccount(user User) (User, error) {
-	// query from database
-	port, parseErr := beego.AppConfig.Int("port")
 
-	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
-	if parseErr != nil {
-		log.Fatal(parseErr)
-	}
-
-	db, err := gorm.Open("postgres", psqlconn)
-	if err != nil {
-		log.Fatal(err)
-	}
-
+	db := ConnectDB()
 	defer db.Close()
 
-	err = db.Where(map[string]interface{}{"id": user.ID}).First(&user).Error
+	prevUser := user
+	err := db.Where(map[string]interface{}{"id": user.ID}).Find(&user).Error
 
-	if err != nil {
-		log.Fatal(err)
+	if err != nil || user.Name == "" {
+		return user, errors.New("Invalid Request")
 	}
 
-	err = db.Save(&user).Error
+	user = prevUser
+	err = db.Model(&user).Updates(User{Name: prevUser.Name}).Error
 
-	// db.First(&user2, "username")
-	return user, err
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+	prevUser.Password = ""
+	return prevUser, err
+}
+
+func (h User) DeleteAccount(id uuid.UUID) (User, error) {
+
+	db := ConnectDB()
+	defer db.Close()
+
+	user := User{}
+
+	err := db.Where(map[string]interface{}{"id": id}).Find(&user).Error
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+
+	err = db.Where(map[string]interface{}{"id": id}).Delete(&user).Error
+
+	if err != nil {
+		return user, errors.New("Invalid Request")
+	}
+	user.Password = ""
+	return user, nil
 }

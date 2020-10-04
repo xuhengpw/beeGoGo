@@ -3,34 +3,54 @@ package controllers
 import (
 	"beeGo/models"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
-	"strconv"
 
-	"github.com/astaxie/beego"
 	uuid "github.com/satori/go.uuid"
 )
 
 type UserController struct {
-	beego.Controller
+	MainController
 }
 
-// // @Param   id    path    int     true  "id"
 func (c *UserController) Get() {
-	idParam, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+
+	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
 
 	user := models.User{}
-	newRetrievedUser, err := models.User.GetByID(user, idParam)
+	result, err := models.User.GetByID(user, idParam)
 
 	if err != nil {
-		return
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
 	}
 
-	c.Data["json"] = newRetrievedUser
+	authentic := c.Authenticate(result)
+
+	if !authentic {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "Invalid Token",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result": result,
+			// "token":   "test",
+			"success": true,
+		},
+	}
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *UserController) Signup() {
 
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
@@ -42,7 +62,19 @@ func (c *UserController) Signup() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	token, err := c.GenerateToken(result)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -52,14 +84,13 @@ func (c *UserController) Signup() {
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
 			"result":  result,
-			"token":   "test",
+			"token":   token,
 			"success": true,
 		},
 	}
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *UserController) Login() {
 
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
@@ -71,7 +102,19 @@ func (c *UserController) Login() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	token, err := c.GenerateToken(user)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
 				"success": false,
 			},
 		}
@@ -81,18 +124,17 @@ func (c *UserController) Login() {
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
 			"result":  result,
-			"token":   "test",
+			"token":   token,
 			"success": true,
 		},
 	}
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *UserController) Update() {
-	fmt.Println("helloworld")
+
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
-	fmt.Println(idParam)
+
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
@@ -104,7 +146,19 @@ func (c *UserController) Update() {
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
 			"data": map[string]interface{}{
-				"result":  "request not found",
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	authentic := c.Authenticate(result)
+
+	if !authentic {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "Invalid Token",
 				"success": false,
 			},
 		}
@@ -113,8 +167,46 @@ func (c *UserController) Update() {
 
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   "test",
+			"result": result,
+			// "token":   token,
+			"success": true,
+		},
+	}
+	c.ServeJSON()
+}
+
+func (c *UserController) Delete() {
+
+	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
+	user := models.User{}
+	result, err := models.User.DeleteAccount(user, idParam)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	authentic := c.Authenticate(result)
+
+	if !authentic {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  "Invalid Token",
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result": result,
+			// "token":   "test",
 			"success": true,
 		},
 	}

@@ -1,15 +1,128 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego"
+	"beeGo/models"
+	"encoding/json"
+	"io/ioutil"
+
+	uuid "github.com/satori/go.uuid"
 )
 
-type TODOController struct {
-	beego.Controller
+type TodoController struct {
+	MainController
 }
 
-func (c *TODOController) Get() {
-	c.Data["Website"] = "beego.me"
-	c.Data["Email"] = "astaxie@gmail.com"
-	c.TplName = "index.tpl"
+// // @Param   id    path    int     true  "id"
+func (c *TodoController) Get() {
+	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
+
+	todo := models.Todo{}
+	result, err := models.Todo.GetByID(todo, idParam)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result":  result,
+			"token":   "test",
+			"success": true,
+		},
+	}
+	c.ServeJSON()
+}
+
+// @Param   id    path    int     true  "id"
+func (c *TodoController) Create() {
+
+	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
+	todo := models.Todo{}
+	err = json.Unmarshal(body, &todo)
+
+	result, err := models.Todo.PostTodo(todo, todo)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result":  result,
+			"token":   "test",
+			"success": true,
+		},
+	}
+	c.ServeJSON()
+}
+
+// @Param   id    path    int     true  "id"
+func (c *TodoController) Update() {
+
+	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
+
+	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
+	todo := models.Todo{}
+	err = json.Unmarshal(body, &todo)
+
+	todo.ID = idParam
+
+	result, err := models.Todo.UpdateActivity(todo, todo)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result":  result,
+			"token":   "test",
+			"success": true,
+		},
+	}
+	c.ServeJSON()
+}
+
+func (c *TodoController) Delete() {
+
+	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
+	todo := models.Todo{}
+	result, err := models.Todo.DeleteActivity(todo, idParam)
+
+	if err != nil {
+		c.Data["json"] = map[string]interface{}{
+			"data": map[string]interface{}{
+				"result":  err,
+				"success": false,
+			},
+		}
+		c.ServeJSON()
+	}
+
+	c.Data["json"] = map[string]interface{}{
+		"data": map[string]interface{}{
+			"result":  result,
+			"token":   "test",
+			"success": true,
+		},
+	}
+	c.ServeJSON()
 }

@@ -21,6 +21,21 @@ var users = []User{
 	// {Name: "Jay Leno"},
 }
 
+func ConnectDB() *gorm.DB {
+	port, parseErr := beego.AppConfig.Int("port")
+	psqlconn := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable", beego.AppConfig.String("host"), port, beego.AppConfig.String("user"), beego.AppConfig.String("password"), beego.AppConfig.String("dbname"))
+	if parseErr != nil {
+		log.Fatal(parseErr)
+	}
+
+	db, err := gorm.Open("postgres", psqlconn)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return db
+}
+
 func Init() {
 
 	port, parseErr := beego.AppConfig.Int("port")
@@ -40,7 +55,7 @@ func Init() {
 	wait := make(chan string)
 
 	go func() {
-		db.DropTable(&User{})
+		// db.DropTable(&User{})
 		db.AutoMigrate(&User{})
 		for index := range users {
 			db.Create(&users[index])
@@ -49,7 +64,7 @@ func Init() {
 	}()
 
 	go func() {
-		db.DropTable(&Todo{})
+		// db.DropTable(&Todo{})
 		db.AutoMigrate(&Todo{})
 		for index := range todo {
 			db.Create(&todo[index])

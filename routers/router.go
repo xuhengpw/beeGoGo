@@ -7,15 +7,28 @@ import (
 )
 
 func init() {
-	test := &controllers.MainController{}
-	beego.Router("/", test)
 
 	user := &controllers.UserController{}
-	// todo := &controllers.TODOController{}
-	// beego.Router("/user/:id", user)
-	beego.Router("/user/signup", user, "post:Signup")
-	beego.Router("/user/login", user, "post:Login")
-	beego.Router("/user/update/:id", user, "put:Update")
-	// beego.Router("/user/logout/:_id", user.Logout)
-	// beego.Router("/user/update/:_id", user.Update)
+	todo := &controllers.TodoController{}
+	profiler := &controllers.ProfController{}
+
+	ns := beego.NewNamespace("/v1",
+
+		beego.NSNamespace("/user",
+			beego.NSRouter("/:id", user, "get:Get;put:Update;delete:Delete"),
+			beego.NSRouter("/signup", user, "post:Signup"),
+			beego.NSRouter("/login", user, "post:Login"),
+		),
+		beego.NSNamespace("/todo",
+			beego.NSRouter("/:id", todo, "get:Get;put:Update;delete:Delete"),
+			beego.NSRouter("/", todo, "post:Create"),
+		),
+		beego.NSNamespace("/pprof",
+			beego.NSRouter(`/:pp([\w]+)`, profiler),
+			beego.NSRouter(`/`, profiler),
+		),
+	)
+
+	beego.AddNamespace(ns)
+
 }
