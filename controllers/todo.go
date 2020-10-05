@@ -12,7 +12,6 @@ type TodoController struct {
 	MainController
 }
 
-// // @Param   id    path    int     true  "id"
 func (c *TodoController) Get() {
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
 
@@ -21,25 +20,19 @@ func (c *TodoController) Get() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   "test",
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *TodoController) Create() {
 
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
@@ -50,25 +43,19 @@ func (c *TodoController) Create() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   "test",
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }
 
-// @Param   id    path    int     true  "id"
 func (c *TodoController) Update() {
 
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
@@ -83,20 +70,15 @@ func (c *TodoController) Update() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   "test",
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }
@@ -109,20 +91,15 @@ func (c *TodoController) Delete() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   "test",
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }

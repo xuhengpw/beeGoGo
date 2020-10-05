@@ -60,13 +60,16 @@ func (h User) PostUser(user User) (User, error) {
 	db := ConnectDB()
 	defer db.Close()
 
-	err := db.Where(User{Username: user.Username}).Select([]string{"name", "username"}).Find(&user).Error
+	password := user.Password
+
+	err := db.Where(User{Username: user.Username}).Find(&user).Error
 
 	if err == nil {
 		return user, errors.New("Duplicate User")
 	}
 
 	user.ID = u1
+	user.Password = password
 
 	db.Create(&user)
 
