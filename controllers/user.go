@@ -50,9 +50,14 @@ func (c *UserController) Signup() {
 	user := models.User{}
 	err = json.Unmarshal(body, &user)
 
-	hash, _ := c.HashPassword(user.Password)
-	user.Password = hash
+	wait := make(chan string)
 
+	go func(chan string) {
+		hash, _ := c.HashPassword(user.Password)
+		wait <- hash
+	}(wait)
+	user.Password = <-wait
+	// fmt.Println(user.Password)
 	result, err := user.PostUser(user)
 
 	if err != nil {

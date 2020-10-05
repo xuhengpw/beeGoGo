@@ -67,14 +67,20 @@ func TestSignup(t *testing.T) {
 	var result map[string]interface{}
 	db := models.ConnectDB()
 	defer db.Close()
-	// db.DropTable(&User{})
 	db.AutoMigrate(&User{})
 
-	jsonStream := `{
-		"username": "testAccountRegali1a",
+	nameupdate := "ignis"
+	updateStream := `{
+		"name": "ignis"
+	}`
+	usernameAssert := "cloud"
+	loginStream := `{
+		"name": "try lang",
+		"username": "cloud",
 		"password": "lucygaladriel"
 	}`
-	reader := strings.NewReader(jsonStream)
+
+	reader := strings.NewReader(loginStream)
 	r, _ := http.NewRequest("POST", "/v1/user/signup", reader)
 	w := httptest.NewRecorder()
 	beego.BeeApp.Handlers.ServeHTTP(w, r)
@@ -84,53 +90,77 @@ func TestSignup(t *testing.T) {
 	dec.Decode(&result)
 	beego.Trace(result)
 	username := result["result"].(map[string]interface{})["username"]
-	id := result["result"].(map[string]interface{})["id"]
-	token := result["token"].(string)
-	fmt.Println(id, token)
+
 	Convey("Subject: Signup Endpoint\n", t, func() {
 		Convey("Result Should Be Invalid Request", func() {
 			So(result["result"], ShouldNotEqual, "Invalid Request")
 		})
 		Convey("Username should be equal", func() {
-			So(username, ShouldNotEqual, "testAccountRegali1a")
+			So(username, ShouldEqual, usernameAssert)
 		})
 	})
+
 	// login naman
-	// jsonStream = `{
-	// 	"username": "testAccountRegali1a",
-	// 	"password": "lucygaladriel"
-	// }`
-	// reader = strings.NewReader(jsonStream)
-	// r, _ = http.NewRequest("POST", "/v1/user/login", reader)
-	// w = httptest.NewRecorder()
-	// beego.BeeApp.Handlers.ServeHTTP(w, r)
-	// beego.Trace(w.Body.String())
-	// reader = strings.NewReader(w.Body.String())
-	// dec = json.NewDecoder(reader)
-	// dec.Decode(&result)
 
-	// Convey("Subject: Login Endpoint Valid\n", t, func() {
-	// 	Convey("Result Should Be Valid Request", func() {
-	// 		So(result["result"], ShouldNotEqual, "Invalid Request")
-	// 	})
+	reader = strings.NewReader(loginStream)
+	r, _ = http.NewRequest("POST", "/v1/user/login", reader)
+	w = httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+	beego.Trace(w.Body.String())
+	reader = strings.NewReader(w.Body.String())
+	dec = json.NewDecoder(reader)
+	var loginResult map[string]interface{}
+	dec.Decode(&loginResult)
 
-	// })
-	// // beego.Trace(token)
-	// r, _ = http.NewRequest("POST", "/v1/user/login", reader)
-	// r.Header.Add("token", token)
-	// w = httptest.NewRecorder()
-	// beego.BeeApp.Handlers.ServeHTTP(w, r)
+	Convey("Subject: Login Endpoint Valid\n", t, func() {
+		Convey("Result Should Be Valid Request", func() {
+			So(loginResult["result"], ShouldNotEqual, "Invalid Request")
+		})
+	})
 
-	// reader = strings.NewReader(w.Body.String())
-	// dec = json.NewDecoder(reader)
-	// dec.Decode(&result)
-	// beego.Trace(token)
-	// // username = result["result"].(map[string]interface{})["username"]
-	// Convey("Subject: Login Endpoint Invalid Token\n", t, func() {
-	// 	Convey("Result Should Be Invalid Request", func() {
-	// 		So(result["result"], ShouldNotEqual, "Invalid Request")
-	// 	})
-	// })
+	// Get USER call naman
+
+	token := loginResult["token"].(string)
+	id := loginResult["result"].(map[string]interface{})["id"]
+	beego.Trace(fmt.Sprintf("/v1/user/%s", id))
+
+	r, _ = http.NewRequest("GET", fmt.Sprintf("/v1/user/%s", id), reader)
+	r.Header.Add("token", token)
+	w = httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+	beego.Trace(w.Body.String())
+	reader = strings.NewReader(w.Body.String())
+	dec = json.NewDecoder(reader)
+	var getResult map[string]interface{}
+	dec.Decode(&getResult)
+	usernamenew := getResult["result"].(map[string]interface{})["username"]
+	Convey("Subject: Get User Endpoint Valid\n", t, func() {
+		Convey("Result Should Be Valid Request", func() {
+			So(usernamenew, ShouldEqual, usernameAssert)
+		})
+	})
+
+	// update naman
+	// token := loginResult["token"].(string)
+	// id := loginResult["result"].(map[string]interface{})["id"]
+	// beego.Trace(fmt.Sprintf("/v1/user/%s", id))
+
+	reader = strings.NewReader(updateStream)
+	r, _ = http.NewRequest("PUT", fmt.Sprintf("/v1/user/%s", id), reader)
+	r.Header.Add("token", token)
+	w = httptest.NewRecorder()
+	beego.BeeApp.Handlers.ServeHTTP(w, r)
+	beego.Trace(w.Body.String())
+	reader = strings.NewReader(w.Body.String())
+	dec = json.NewDecoder(reader)
+	var putResult map[string]interface{}
+	dec.Decode(&putResult)
+	newname := putResult["result"].(map[string]interface{})["name"]
+	Convey("Subject: Update User Endpoint Valid\n", t, func() {
+		Convey("Result Should Be Valid Request", func() {
+			So(newname, ShouldEqual, nameupdate)
+		})
+	})
 }
 
 func TestValidLogin(t *testing.T) {
