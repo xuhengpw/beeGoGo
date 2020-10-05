@@ -60,6 +60,8 @@ func (h User) PostUser(user User) (User, error) {
 	db := ConnectDB()
 	defer db.Close()
 
+	password := user.Password
+
 	err := db.Where(User{Username: user.Username}).Select([]string{"name", "username"}).Find(&user).Error
 
 	if err == nil {
@@ -67,7 +69,7 @@ func (h User) PostUser(user User) (User, error) {
 	}
 
 	user.ID = u1
-
+	user.Password = password
 	db.Create(&user)
 
 	user.Password = ""

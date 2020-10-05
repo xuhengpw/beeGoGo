@@ -21,10 +21,8 @@ func (c *AdminController) Get() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
@@ -33,20 +31,15 @@ func (c *AdminController) Get() {
 
 	if !authentic {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  "Invalid Token",
-				"success": false,
-			},
+			"result":  "Invalid Token",
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   "test",
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }
@@ -64,10 +57,8 @@ func (c *AdminController) Signup() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  "Create User failed",
-				"success": false,
-			},
+			"result":  "Create User failed",
+			"success": false,
 		}
 		c.ServeJSON()
 	}
@@ -76,20 +67,16 @@ func (c *AdminController) Signup() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  "Token generation failed",
-				"success": false,
-			},
+
+			"result":  "Token generation failed",
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   token,
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }
@@ -105,10 +92,8 @@ func (c *AdminController) Login() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  "Invalid Request",
-				"success": false,
-			},
+			"result":  "Invalid Request",
+			"success": false,
 		}
 		c.ServeJSON()
 	}
@@ -117,10 +102,8 @@ func (c *AdminController) Login() {
 
 	if !(match) {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  "Invalid Request",
-				"success": false,
-			},
+			"result":  "Invalid Request",
+			"success": false,
 		}
 		c.ServeJSON()
 	}
@@ -129,21 +112,17 @@ func (c *AdminController) Login() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	result.Password = ""
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result":  result,
-			"token":   token,
-			"success": true,
-		},
+		"result":  result,
+		"token":   token,
+		"success": true,
 	}
 	c.ServeJSON()
 }
@@ -162,10 +141,8 @@ func (c *AdminController) Update() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
@@ -174,20 +151,15 @@ func (c *AdminController) Update() {
 
 	if !authentic {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  "Invalid Token",
-				"success": false,
-			},
+			"result":  "Invalid Token",
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   token,
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }
@@ -200,10 +172,8 @@ func (c *AdminController) Delete() {
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  err,
-				"success": false,
-			},
+			"result":  err,
+			"success": false,
 		}
 		c.ServeJSON()
 	}
@@ -212,20 +182,15 @@ func (c *AdminController) Delete() {
 
 	if !authentic {
 		c.Data["json"] = map[string]interface{}{
-			"data": map[string]interface{}{
-				"result":  "Invalid Token",
-				"success": false,
-			},
+			"result":  "Invalid Token",
+			"success": false,
 		}
 		c.ServeJSON()
 	}
 
 	c.Data["json"] = map[string]interface{}{
-		"data": map[string]interface{}{
-			"result": result,
-			// "token":   "test",
-			"success": true,
-		},
+		"result":  result,
+		"success": true,
 	}
 	c.ServeJSON()
 }

@@ -55,7 +55,7 @@ func Init() {
 	wait := make(chan string)
 
 	go func() {
-		// db.DropTable(&User{})
+		db.DropTable(&User{})
 		db.AutoMigrate(&User{})
 		for index := range users {
 			db.Create(&users[index])
@@ -64,7 +64,7 @@ func Init() {
 	}()
 
 	go func() {
-		// db.DropTable(&Todo{})
+		db.DropTable(&Todo{})
 		db.AutoMigrate(&Todo{})
 		for index := range todo {
 			db.Create(&todo[index])

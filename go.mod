@@ -12,6 +12,8 @@ require (
 	github.com/lib/pq v1.8.0
 	github.com/satori/go.uuid v1.2.0
 	github.com/satori/uuid v1.2.0
+	github.com/smartystreets/goconvey v0.0.0-20190330032615-68dc04aab96a
+	github.com/stretchr/testify v1.4.0
 	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0
 	gopkg.in/go-playground/validator.v8 v8.18.2
 )
