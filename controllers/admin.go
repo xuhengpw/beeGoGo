@@ -8,11 +8,11 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
-type UserController struct {
+type AdminController struct {
 	MainController
 }
 
-func (c *UserController) Get() {
+func (c *AdminController) Get() {
 
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
 
@@ -51,16 +51,16 @@ func (c *UserController) Get() {
 	c.ServeJSON()
 }
 
-func (c *UserController) Signup() {
+func (c *AdminController) Signup() {
 
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
-	user := models.User{}
-	err = json.Unmarshal(body, &user)
+	admin := models.Admin{}
+	err = json.Unmarshal(body, &admin)
 
-	hash, _ := c.HashPassword(user.Password)
-	user.Password = hash
+	hash, _ := c.HashPassword(admin.Password)
+	admin.Password = hash
 
-	result, err := models.User.PostUser(user, user)
+	result, err := admin.CreateAdmin(admin)
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
@@ -72,7 +72,7 @@ func (c *UserController) Signup() {
 		c.ServeJSON()
 	}
 
-	token, err := c.GenToken(result.ID, result.Username)
+	c.GenToken(result.ID, result.Username)
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
@@ -86,15 +86,15 @@ func (c *UserController) Signup() {
 
 	c.Data["json"] = map[string]interface{}{
 		"data": map[string]interface{}{
-			"result":  result,
-			"token":   token,
+			"result": result,
+			// "token":   token,
 			"success": true,
 		},
 	}
 	c.ServeJSON()
 }
 
-func (c *UserController) Login() {
+func (c *AdminController) Login() {
 
 	body, err := ioutil.ReadAll(c.Ctx.Request.Body)
 	user := models.User{}
@@ -148,7 +148,7 @@ func (c *UserController) Login() {
 	c.ServeJSON()
 }
 
-func (c *UserController) Update() {
+func (c *AdminController) Update() {
 
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
 
@@ -158,7 +158,7 @@ func (c *UserController) Update() {
 
 	user.ID = idParam
 
-	result, err := user.UpdateAccount(user)
+	result, err := models.User.UpdateAccount(user, user)
 
 	if err != nil {
 		c.Data["json"] = map[string]interface{}{
@@ -192,7 +192,7 @@ func (c *UserController) Update() {
 	c.ServeJSON()
 }
 
-func (c *UserController) Delete() {
+func (c *AdminController) Delete() {
 
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))
 	user := models.User{}
