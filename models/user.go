@@ -98,20 +98,21 @@ func (h User) UpdateAccount(user User) (User, error) {
 	defer db.Close()
 
 	prevUser := user
+
 	err := db.Where(map[string]interface{}{"id": user.ID}).Find(&user).Error
 
 	if err != nil || user.Name == "" {
 		return user, errors.New("Invalid Request")
 	}
 
-	user = prevUser
 	err = db.Model(&user).Updates(User{Name: prevUser.Name}).Error
 
 	if err != nil {
 		return user, errors.New("Invalid Request")
 	}
-	prevUser.Password = ""
-	return prevUser, err
+	user.Name = prevUser.Name
+	user.Password = ""
+	return user, err
 }
 
 func (h User) DeleteAccount(id uuid.UUID) (User, error) {

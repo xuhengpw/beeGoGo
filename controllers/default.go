@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"beeGo/models"
 	"errors"
 
 	"golang.org/x/crypto/bcrypt"
@@ -10,6 +9,8 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	uuid "github.com/satori/go.uuid"
 )
+
+type VarArgs map[string]interface{}
 
 type customClaims struct {
 	Username string    `json:"username"`
@@ -33,11 +34,10 @@ func (a *MainController) CheckPasswordHash(password, hash string) bool {
 	return err == nil
 }
 
-func (a *MainController) GenerateToken(user models.User) (string, error) {
-
+func (a *MainController) GenToken(id uuid.UUID, username string) (string, error) {
 	claims := &customClaims{
-		Username: user.Username,
-		ID:       user.ID,
+		Username: username,
+		ID:       id,
 		StandardClaims: jwt.StandardClaims{
 			Issuer: "beeoGogo",
 		},
@@ -53,11 +53,11 @@ func (a *MainController) GenerateToken(user models.User) (string, error) {
 	return signedToken, nil
 }
 
-func (a *MainController) Authenticate(user models.User) bool {
+func (a *MainController) Authenticate(id uuid.UUID, username string) bool {
 
 	claims := &customClaims{
-		Username: user.Username,
-		ID:       user.ID,
+		Username: username,
+		ID:       id,
 		StandardClaims: jwt.StandardClaims{
 			Issuer: "beeoGogo",
 		},

@@ -8,6 +8,7 @@ import (
 
 func init() {
 
+	admin := &controllers.UserController{}
 	user := &controllers.UserController{}
 	todo := &controllers.TodoController{}
 	profiler := &controllers.ProfController{}
@@ -26,6 +27,11 @@ func init() {
 		beego.NSNamespace("/pprof",
 			beego.NSRouter(`/:pp([\w]+)`, profiler),
 			beego.NSRouter(`/`, profiler),
+		),
+		beego.NSNamespace("/admin",
+			beego.NSRouter("/:id", admin, "get:Get;put:Update;delete:Delete"),
+			beego.NSRouter("/signup", admin, "post:Signup"),
+			beego.NSRouter("/login", admin, "post:Login"),
 		),
 	)
 
