@@ -12,9 +12,8 @@ func init() {
 	user := &controllers.UserController{}
 	todo := &controllers.TodoController{}
 	profiler := &controllers.ProfController{}
-
+	beego.Router("/", &controllers.MainController{}, "get:Get")
 	ns := beego.NewNamespace("/v1",
-
 		beego.NSNamespace("/user",
 			beego.NSRouter("/:id", user, "get:Get;put:Update;delete:Delete"),
 			beego.NSRouter("/signup", user, "post:Signup"),

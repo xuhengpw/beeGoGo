@@ -24,6 +24,12 @@ type MainController struct {
 
 var secretkey = beego.AppConfig.String("secretkey")
 
+func (a *MainController) Get() {
+	a.Data["Website"] = "beego.me"
+	a.Data["Email"] = "astaxie@gmail.com"
+	a.TplName = "signup.tpl"
+}
+
 func (a *MainController) HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
