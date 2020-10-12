@@ -12,6 +12,10 @@ type AdminController struct {
 	MainController
 }
 
+func (c *AdminController) GetEmployeeList() {
+
+}
+
 func (c *AdminController) Get() {
 
 	idParam := uuid.FromStringOrNil(c.Ctx.Input.Param(":id"))

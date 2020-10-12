@@ -39,6 +39,7 @@ func (c *UserController) Get() {
 
 	c.Data["json"] = map[string]interface{}{
 		"result":  result,
+		"token":   c.Ctx.Request.Header.Get("token"),
 		"success": true,
 	}
 	c.ServeJSON()
@@ -166,6 +167,7 @@ func (c *UserController) Update() {
 
 	c.Data["json"] = map[string]interface{}{
 		"result":  result,
+		"token":   c.Ctx.Request.Header.Get("token"),
 		"success": true,
 	}
 	c.ServeJSON()
@@ -197,6 +199,7 @@ func (c *UserController) Delete() {
 
 	c.Data["json"] = map[string]interface{}{
 		"result":  result,
+		"token":   c.Ctx.Request.Header.Get("token"),
 		"success": true,
 	}
 	c.ServeJSON()

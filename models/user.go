@@ -9,10 +9,34 @@ import (
 )
 
 type User struct {
-	ID       uuid.UUID `json:"id,omitempty"`
-	Name     string    `json:"name,omitempty"`
-	Username string    `json:"username,omitempty,unique"`
-	Password string    `json:"password,omitempty"`
+	ID                 uuid.UUID `json:"id,omitempty"`
+	email              string    `json:"email,omitempty"`
+	Name               string    `json:"name,omitempty"`
+	Username           string    `json:"username,omitempty,unique"`
+	Password           string    `json:"password,omitempty"`
+	Role               string    `json:"role,omitempty"`
+	EmploymentStatus   bool      `json:"employment_status,omitempty"`
+	MaritalStatus      string    `json:"marital_status,omitempty"`
+	Days               int       `json:"days,omitempty"`
+	Rate               float32   `json:"rate,omitempty"`
+	BasicSalary        float32   `json:"basic_salary,omitempty"`
+	Deminimis          float32   `json:"deminimis,omitempty"`
+	Ecola              float32   `json:"ecola,omitempty"`
+	Transpo            float32   `json:"transpo,omitempty"`
+	Meals              float32   `json:"meals,omitempty"`
+	Others             float32   `json:"others,omitempty"`
+	Holiday            float32   `json:"holiday,omitempty"`
+	BirthdayGift       float32   `json:"birthday_gift,omitempty"`
+	OvertimeRegular    float32   `json:"overtime_regular,omitempty"`
+	OvertimeSpecial    float32   `json:"overtime_special,omitempty"`
+	OvertimeTotal      float32   `json:"overtime_titak,omitempty"`
+	slvlRefund         float32   `json:"slvl_refund,omitempty"`
+	adjustmentEarnings float32   `json:"adjustment_earnings,omitempty"`
+	TardinessHours     float32   `json:"tardiness_hours,omitempty"`
+	TardinessAmount    float32   `json:"tardiness_amount,omitempty"`
+	AbsenceDays        float32   `json:"absence_days,omitempty"`
+	AbsenceAmount      float32   `json:"absence_amount,omitempty"`
+	GrossIncome        float32   `json:"gross_income,omitempty"`
 }
 
 func (h User) GetHashPassword(user User) (User, error) {

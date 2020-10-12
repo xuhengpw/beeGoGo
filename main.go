@@ -29,6 +29,9 @@ func main() {
 	// 	}
 	// 	defer pprof.StopCPUProfile()
 	// }
+	beego.SetStaticPath("/images", "images")
+	beego.SetStaticPath("/css", "css")
+	beego.SetStaticPath("/js", "js")
 
 	if os.Getenv("PORT") != "" {
 		port, err := strconv.Atoi(os.Getenv("PORT"))
